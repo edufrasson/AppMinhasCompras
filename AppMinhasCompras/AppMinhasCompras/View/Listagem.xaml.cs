@@ -14,6 +14,8 @@ namespace AppMinhasCompras.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Listagem : ContentPage
     {
+        // Coleção Observável -> Array de objeto que atualiza a interface 
+        ObservableCollection<Produto> lista_produtos = new ObservableCollection<Produto>();
         public Listagem()
         {
             InitializeComponent();
@@ -26,13 +28,18 @@ namespace AppMinhasCompras.View
 
         private void ToolbarItem_Clicked_1(object sender, EventArgs e)
         {
+            double soma = lista_produtos.Sum(i => i.Preco * i.Quantidade);
 
+            string msg = "O total da compra é: " + soma;
+
+
+            // 1:24:29
+            DisplayAlert("Total", msg, "OK");
         }
 
         protected override void OnAppearing()
         {
-            // Coleção Observável -> Array de objeto que atualiza a interface 
-            ObservableCollection<Produto> lista_produtos = new ObservableCollection<Produto>();
+            
 
             // Na hora da tela da listagem aparecer, começa uma task paralela
             System.Threading.Tasks.Task.Run(async () =>
