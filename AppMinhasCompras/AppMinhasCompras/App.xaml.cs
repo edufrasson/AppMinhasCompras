@@ -17,7 +17,7 @@ namespace AppMinhasCompras
                 if(database == null)
                 {
                     string path = Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
                             "arquivo.db3"
                         );
 
@@ -31,7 +31,7 @@ namespace AppMinhasCompras
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage( new MainPage());
+            MainPage = new NavigationPage(new View.Listagem());
         }
 
         protected override void OnStart()

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AppMinhasCompras.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +17,40 @@ namespace AppMinhasCompras.View
         public Listagem()
         {
             InitializeComponent();
+        }
+
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new View.NovoProduto());
+        }
+
+        private void ToolbarItem_Clicked_1(object sender, EventArgs e)
+        {
+
+        }
+
+        protected override void OnAppearing()
+        {
+            // Coleção Observável -> Array de objeto que atualiza a interface 
+            ObservableCollection<Produto> lista_produtos = new ObservableCollection<Produto>();
+
+            // Na hora da tela da listagem aparecer, começa uma task paralela
+            System.Threading.Tasks.Task.Run(async () =>
+            {
+                List<Produto> temp = await App.Database.GetAll();
+
+                // Preenchendo a ObservableCollection
+                foreach(Produto item in temp)
+                {
+                    lista_produtos.Add(item);
+                }
+
+                ref_carregando.IsRefreshing = false;
+            });
+
+            lst_produtos.ItemsSource = lista_produtos;
+
+            
         }
     }
 }

@@ -19,24 +19,24 @@ namespace AppMinhasCompras.Helper
 
         }
 
-        public Task<int> insert(Produto p)
+        public Task<int> Insert(Produto p)
         {
             return _conn.InsertAsync(p);
         }
 
-        public void update(Produto p)
+        public void Update(Produto p)
         {
             string sql = "UPDATE Produto SET descricao = ?, quantidade = ?, preco = ? WHERE id = ?";
 
             _conn.QueryAsync<Produto>(sql, p.Descricao, p.Quantidade, p.Preco, p.Id);
         }
 
-        public Produto getById()
+        public Produto GetById()
         {
             return new Produto();
         }
 
-        public Task<List<Produto>> getAll()
+        public Task<List<Produto>> GetAll()
         {
             return _conn.Table<Produto>().ToListAsync();
         }
