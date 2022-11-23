@@ -19,6 +19,8 @@ namespace AppMinhasCompras.View
         public Listagem()
         {
             InitializeComponent();
+
+            lst_produtos.ItemsSource = lista_produtos;
         }
 
         private void ToolbarItem_Clicked(object sender, EventArgs e)
@@ -39,25 +41,61 @@ namespace AppMinhasCompras.View
 
         protected override void OnAppearing()
         {
-            
+            if(lista_produtos.Count == 0)
+            {
+                // Na hora da tela da listagem aparecer, começa uma task paralela
+                System.Threading.Tasks.Task.Run(async () =>
+                {
+                    List<Produto> temp = await App.Database.GetAll();
 
+                    // Preenchendo a ObservableCollection
+                    foreach (Produto item in temp)
+                    {
+                        lista_produtos.Add(item);
+                    }
+
+                    ref_carregando.IsRefreshing = false;
+                });
+            }
+
+                    
+
+            
+        }
+
+        private async void MenuItem_Clicked(object sender, EventArgs e)
+        {
+            MenuItem disparador = (MenuItem)sender;
+            Produto produto_selecionado = (Produto)disparador.BindingContext;
+
+            bool confirmacao = await DisplayAlert("Tem Certeza?", "Remover Item?", "Sim", "Não");
+
+            if (confirmacao)
+            {
+                await App.Database.Delete(produto_selecionado.Id);
+
+                lista_produtos.Remove(produto_selecionado);
+            }
+        }
+
+        private void txt_busca_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string buscou = e.NewTextValue;
             // Na hora da tela da listagem aparecer, começa uma task paralela
             System.Threading.Tasks.Task.Run(async () =>
             {
-                List<Produto> temp = await App.Database.GetAll();
+                List<Produto> temp = await App.Database.Search(buscou);
+
+                lista_produtos.Clear();
 
                 // Preenchendo a ObservableCollection
-                foreach(Produto item in temp)
+                foreach (Produto item in temp)
                 {
                     lista_produtos.Add(item);
                 }
 
                 ref_carregando.IsRefreshing = false;
             });
-
-            lst_produtos.ItemsSource = lista_produtos;
-
-            
         }
     }
 }

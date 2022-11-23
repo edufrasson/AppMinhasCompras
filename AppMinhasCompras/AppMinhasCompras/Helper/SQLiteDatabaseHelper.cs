@@ -45,5 +45,12 @@ namespace AppMinhasCompras.Helper
         {
             return _conn.Table<Produto>().DeleteAsync(i => i.Id == id);
         }
+
+        public Task<List<Produto>> Search(string busca)
+        {
+            string sql = "SELECT * FROM Produto WHERE Descricao LIKE '% " + busca + "%'";
+
+            return _conn.QueryAsync<Produto>(sql);
+        }
     }
 }
