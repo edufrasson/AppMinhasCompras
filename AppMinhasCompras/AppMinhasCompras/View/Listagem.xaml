@@ -18,7 +18,7 @@
                             
 
             <RefreshView x:Name="ref_carregando" IsRefreshing="True">
-                <ListView x:Name="lst_produtos">
+                <ListView x:Name="lst_produtos" ItemSelected="lst_produtos_ItemSelected">
                     <ListView.Header>
                         <Grid ColumnDefinitions="*, Auto, Auto"
                               RowDefinitions="Auto"

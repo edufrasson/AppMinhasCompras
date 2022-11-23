@@ -81,7 +81,7 @@ namespace AppMinhasCompras.View
         private void txt_busca_TextChanged(object sender, TextChangedEventArgs e)
         {
             string buscou = e.NewTextValue;
-            // Na hora da tela da listagem aparecer, começa uma task paralela
+          
             System.Threading.Tasks.Task.Run(async () =>
             {
                 List<Produto> temp = await App.Database.Search(buscou);
@@ -95,6 +95,14 @@ namespace AppMinhasCompras.View
                 }
 
                 ref_carregando.IsRefreshing = false;
+            });
+        }
+
+        private void lst_produtos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            Navigation.PushAsync(new EditarProduto
+            {
+                BindingContext = (Produto)e.SelectedItem
             });
         }
     }

@@ -24,11 +24,11 @@ namespace AppMinhasCompras.Helper
             return _conn.InsertAsync(p);
         }
 
-        public void Update(Produto p)
+        public Task<List<Produto>> Update(Produto p)
         {
             string sql = "UPDATE Produto SET descricao = ?, quantidade = ?, preco = ? WHERE id = ?";
 
-            _conn.QueryAsync<Produto>(sql, p.Descricao, p.Quantidade, p.Preco, p.Id);
+            return _conn.QueryAsync<Produto>(sql, p.Descricao, p.Quantidade, p.Preco, p.Id);
         }
 
         public Produto GetById()
@@ -48,7 +48,7 @@ namespace AppMinhasCompras.Helper
 
         public Task<List<Produto>> Search(string busca)
         {
-            string sql = "SELECT * FROM Produto WHERE Descricao LIKE '% " + busca + "%'";
+            string sql = "SELECT * FROM Produto WHERE Descricao LIKE '%" + busca + "%'";
 
             return _conn.QueryAsync<Produto>(sql);
         }
